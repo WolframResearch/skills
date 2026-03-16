@@ -6,7 +6,7 @@ description: >
   question, short-answer grader, numeric question, fill-in-the-blank, or any kind of interactive
   question for a Wolfram notebook or course. Also trigger when the user asks about scoring,
   partial credit, explanation feedback, comparison methods (AlgebraicValue, CalculusResult,
-  CodeEquivalence, etc.), QuestionGroup, QuestionGenerator, or QuestionInterface types.
+  CodeEquivalence, etc.), QuestionGenerator, or QuestionInterface types.
   Trigger even if they just say "make a question about X" or "how do I grade answers in WL".
 ---
 
@@ -15,6 +15,10 @@ description: >
 This skill guides you through constructing correct, idiomatic `QuestionObject` and
 `AssessmentFunction` expressions — the core building blocks of the Wolfram Language assessment
 framework (System context, experimental).
+
+QuestionObject should only be used when you want to create an interactive question interface for use in a Wolfram Notebook.
+
+AssessmentFunction is purely computational. It is used to determine if answers match an answer key.
 
 ---
 
@@ -97,6 +101,9 @@ QuestionObject[
 ## Comparison Methods
 
 Specify in `AssessmentFunction[key, "method"]` or inside the settings Association.
+
+For open-ended answers like "ShortAnswer", the `ComparisonMethod` determines how the submitted answer is compared to the key. Choosing the right method is crucial for correct assessment.
+
 
 | Method | Best for | Distance |
 |---|---|---|
@@ -197,15 +204,6 @@ AssessmentFunction[
 `"Selector"` alternative — useful when you want to pick the nearest key:
 ```wl
 <|"Selector" -> Composition[First, Nearest]|>
-```
-
----
-
-## QuestionGroup
-
-Bundle related questions together:
-```wl
-QuestionGroup["Calculus Quiz", {q1, q2, q3}]
 ```
 
 ---
