@@ -1,0 +1,81 @@
+{
+  "skill_name": "questions-and-assessments",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm building a geography quiz notebook for my students. Can you make a multiple choice question asking what the capital of France is? The choices should be Paris, Lyon, Marseille, and Nice.",
+      "expected_output": "A QuestionObject with an AssessmentFunction whose key is a list where exactly one answer (Paris) has a positive score, and the others are incorrect. The MultipleChoice interface should be inferred automatically.",
+      "files": [],
+      "expectations": [
+        "Output contains QuestionObject",
+        "Output contains AssessmentFunction with a list key containing four answer options",
+        "Paris is the correct answer (has a positive score, -> True, or -> 1)",
+        "The other three cities (Lyon, Marseille, Nice) are marked incorrect or have no positive score",
+        "No explicit QuestionInterface call is used — MultipleChoice is auto-inferred from having exactly one correct answer"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I want a question for my physics students where they need to type the value of gravitational acceleration near Earth's surface in m/s². I want to accept any numeric answer within 0.05 of the correct value. The answer should also accept the value as a Quantity with units.",
+      "expected_output": "A QuestionObject with an AssessmentFunction that uses the 'Quantity' or 'Number' comparison method and includes Tolerance -> 0.05. The correct answer should be approximately 9.8 m/s².",
+      "files": [],
+      "expectations": [
+        "Output contains AssessmentFunction with Tolerance -> 0.05 (or equivalent)",
+        "Output uses 'Quantity' or 'Number' as the comparison method",
+        "The correct answer value is approximately 9.8",
+        "Output is wrapped in a QuestionObject with an appropriate prompt about gravitational acceleration"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "For my number theory course I need a 'select all that apply' question. Students should check all the prime numbers from this list: 2, 3, 4, 5, 6, 8, 11. Each selection should be scored independently — getting one wrong shouldn't wipe out partial credit for the others they got right.",
+      "expected_output": "A QuestionObject with an AssessmentFunction that uses SeparatelyScoreElements so each checkbox is graded independently. Primes (2, 3, 5, 11) get positive scores; composites (4, 6, 8) get 0.",
+      "files": [],
+      "expectations": [
+        "Output contains 'SeparatelyScoreElements' in the AssessmentFunction settings Association",
+        "Output contains AssessmentFunction listing all seven numbers: 2, 3, 4, 5, 6, 8, and 11",
+        "2, 3, 5, and 11 have positive scores (they are prime)",
+        "4, 6, and 8 have zero or negative scores (they are composite)",
+        "Output is wrapped in a QuestionObject"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm making a calculus assessment. I need a question that asks students to find the derivative of x^3 + 2x with respect to x. I want to accept any algebraically equivalent form of the derivative — so 3x^2 + 2 and 2 + 3x^2 should both count as correct. How do I set this up in Wolfram Language?",
+      "expected_output": "A QuestionObject with an AssessmentFunction using 'CalculusResult' or 'AlgebraicValue' as the comparison method, with the correct answer being 3x^2 + 2 (or equivalent). The method should accept algebraically equivalent forms.",
+      "files": [],
+      "expectations": [
+        "Output uses 'CalculusResult' or 'AlgebraicValue' as the comparison method",
+        "The correct answer is 3*x^2 + 2 or an algebraically equivalent expression",
+        "Output is wrapped in a QuestionObject with a differentiation prompt",
+        "The chosen method accepts algebraically equivalent forms — not just exact-match like 'Expression'"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I want a randomized multiplication quiz where each time the question appears, it picks two random integers between 2 and 9 and asks the student to multiply them. Each version of the question should know its own correct answer.",
+      "expected_output": "A QuestionGenerator wrapping a Function that uses RandomInteger[{2,9}] to pick two factors, builds a QuestionObject prompt string showing the multiplication, and uses AssessmentFunction with the product as the correct answer.",
+      "files": [],
+      "expectations": [
+        "Output uses QuestionGenerator",
+        "Output contains RandomInteger (with range {2,9} or equivalent) to pick the two factors",
+        "The AssessmentFunction correct answer is the product of the two factors (a*b or equivalent WL expression)",
+        "The prompt string dynamically includes both factors so the student knows what to multiply",
+        "Output uses 'Number' or an equivalent numeric comparison method"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Can you make a true/false question asking whether the Sun is a star? After the student answers, I want to show a short explanation — something encouraging if they're right, and a correction with a brief fact if they're wrong.",
+      "expected_output": "A QuestionObject with a TrueFalse AssessmentFunction where True is correct and False is incorrect. Explanations are provided via per-answer Association with 'Explanation' key, or via an ExplanationFunction.",
+      "files": [],
+      "expectations": [
+        "Output contains AssessmentFunction with True and False as answer options",
+        "True has a positive score (correct answer — the Sun is a star)",
+        "False has a zero or negative score (incorrect answer)",
+        "Explanations are provided — either via Association 'Explanation' key per answer, or via an ExplanationFunction",
+        "Output is wrapped in a QuestionObject with a prompt asking whether the Sun is a star"
+      ]
+    }
+  ]
+}

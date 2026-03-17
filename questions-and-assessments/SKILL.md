@@ -1,13 +1,7 @@
 ---
 name: questions-and-assessments
 description: >
-  Create Wolfram Language QuestionObject and AssessmentFunction expressions. Use this skill
-  whenever the user wants to build a quiz question, assessment, multiple-choice item, true/false
-  question, short-answer grader, numeric question, fill-in-the-blank, or any kind of interactive
-  question for a Wolfram notebook or course. Also trigger when the user asks about scoring,
-  partial credit, explanation feedback, comparison methods (AlgebraicValue, CalculusResult,
-  CodeEquivalence, etc.), QuestionGenerator, or QuestionInterface types.
-  Trigger even if they just say "make a question about X" or "how do I grade answers in WL".
+  Create Wolfram Language QuestionObject and AssessmentFunction expressions. Use this skill whenever the user wants to build a quiz question, assessment, multiple-choice item, true/false question, short-answer grader, numeric question, fill-in-the-blank, or any kind of interactive question for a Wolfram notebook or course. Also trigger when the user asks about scoring, partial credit, explanation feedback, comparison methods (AlgebraicValue, CalculusResult, CodeEquivalence, etc.), QuestionGenerator, or QuestionInterface types. Trigger even if they just say "make a question about X" or "how do I grade answers in WL".
 ---
 
 # Questions and Assessment in Wolfram Language
@@ -18,7 +12,7 @@ framework (System context, experimental).
 
 QuestionObject should only be used when you want to create an interactive question interface for use in a Wolfram Notebook.
 
-AssessmentFunction is purely computational. It is used to determine if answers match an answer key.
+AssessmentFunction is purely computational. It is used to determine if answers match an answer key. AssessmentFunction includes many sophisticated mathematical comparison methods (AlgebraicValue, CalculusResult, etc.) that go far beyond simple string matching or numeric tolerance checks.
 
 ---
 
@@ -222,6 +216,12 @@ QuestionGenerator[Function[{},
 ]]
 ```
 
+
+To generate a random question, evaluate the `QuestionGenerator`:
+```wl
+question = QuestionGenerator[...][]
+```
+
 ---
 
 ## AssessmentResultObject
@@ -252,9 +252,28 @@ AssessmentFunction[{{"red"} -> 1}]
 **ChooseMultiple needs SeparatelyScoreElements to show checkboxes:**
 Without it, the interface defaults to `MultipleChoice` even with multiple correct answers.
 
-**AlgebraicValue requires `Hold` internally** — you write the expressions normally; WL wraps them automatically. Don't `Hold` them yourself.
+**Some comparison methods and answer keys require `Hold` to prevent premature evaluation:**
+```wl
+AssessmentFunction[{Hold[(x - 1)/((x + 1) (x - 1))]}, "CalculusResult"]
+```
 
 **Tolerance only applies to distance-based methods** (`"Number"`, `"Quantity"`, `"Vector"`, `"GeoPosition"`, `"Date"`, `"Color"`). It has no effect on `"Expression"` or `"AlgebraicValue"`.
+
+**Deployment to the cloud is simple with ResourceFunction["QuestionDeploy"]:**
+
+```wl
+QuestionDeploy[
+  QuestionObject[
+    ...
+  ]
+]
+```
+
+```wl
+QuestionDeploy[
+    AssessmentFunction[...]
+]
+```
 
 ---
 
